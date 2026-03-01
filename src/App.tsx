@@ -1,6 +1,92 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ArrowRight, Zap, Bot, Rocket, CheckCircle2, Clock, Layers, Terminal, Workflow, ExternalLink } from 'lucide-react';
+import { ArrowRight, Zap, Bot, Rocket, CheckCircle2, Clock, Layers, Terminal, Workflow, ExternalLink, X } from 'lucide-react';
+
+const LEGAL_DOCS = {
+  privacy: {
+    title: 'Политика конфиденциальности',
+    content: `
+      <h2>1. Общие положения</h2>
+      <p>Настоящая политика обработки персональных данных составлена в соответствии с требованиями законодательства и определяет порядок обработки персональных данных и меры по обеспечению безопасности персональных данных, предпринимаемые Ai Platform (далее — Оператор).</p>
+      
+      <h2>2. Основные понятия</h2>
+      <p>Оператор ставит своей важнейшей целью и условием осуществления своей деятельности соблюдение прав и свобод человека и гражданина при обработке его персональных данных, в том числе защиты прав на неприкосновенность частной жизни, личную и семейную тайну.</p>
+      
+      <h2>3. Персональные данные</h2>
+      <p>Оператор может обрабатывать следующие персональные данные Пользователя: Фамилия, имя, отчество; Электронный адрес; Номера телефонов; Ссылка на профиль в Telegram.</p>
+      
+      <h2>4. Цели обработки</h2>
+      <p>Цель обработки персональных данных Пользователя — информирование Пользователя посредством отправки электронных писем; предоставление доступа Пользователю к сервисам, информации и/или материалам, содержащимся на веб-сайте; уточнение деталей заказа.</p>
+      
+      <h2>5. Срок обработки</h2>
+      <p>Обработка персональных данных осуществляется бессрочно. Пользователь может в любой момент отозвать свое согласие на обработку персональных данных, направив Оператору уведомление посредством электронной почты или через Telegram.</p>
+    `
+  },
+  terms: {
+    title: 'Пользовательское соглашение',
+    content: `
+      <h2>1. Предмет соглашения</h2>
+      <p>Настоящее Соглашение регулирует отношения между Ai Platform и физическим или юридическим лицом (Пользователем), использующим услуги сайта для заказа разработки MVP и автоматизации.</p>
+      
+      <h2>2. Условия оказания услуг</h2>
+      <p>Ai Platform предоставляет услуги по разработке программного обеспечения на базе AI-технологий. Сроки и стоимость каждого проекта фиксируются в индивидуальном договоре или подтверждаются через официальные каналы связи (Telegram).</p>
+      
+      <h2>3. Интеллектуальная собственность</h2>
+      <p>После полной оплаты услуг все исключительные права на разработанный программный код и дизайн переходят к Заказчику, если иное не оговорено в индивидуальном соглашении.</p>
+      
+      <h2>4. Ответственность сторон</h2>
+      <p>Оператор не несет ответственности за косвенные убытки или упущенную выгоду Заказчика, возникшие в результате использования разработанного ПО. Максимальная ответственность ограничена стоимостью оплаченных услуг.</p>
+    `
+  },
+  cookies: {
+    title: 'Политика использования Cookie',
+    content: `
+      <h2>Что такое Cookie?</h2>
+      <p>Cookie — это небольшие текстовые файлы, которые сохраняются на вашем устройстве при посещении веб-сайта. Они помогают нам сделать ваше взаимодействие с сайтом более удобным и эффективным.</p>
+      
+      <h2>Как мы используем Cookie?</h2>
+      <p>Мы используем аналитические cookie-файлы для сбора информации о том, как посетители используют наш сайт. Это помогает нам улучшать структуру и контент. Мы не используем cookie для сбора личной информации, которая могла бы идентифицировать вас без вашего согласия.</p>
+      
+      <h2>Как управлять Cookie?</h2>
+      <p>Вы можете настроить свой браузер таким образом, чтобы он блокировал cookie-файлы или уведомлял вас об их отправке. Однако в этом случае некоторые функции сайта могут работать некорректно.</p>
+    `
+  }
+};
+
+function LegalModal({ type, onClose }: { type: keyof typeof LEGAL_DOCS; onClose: () => void }) {
+  const doc = LEGAL_DOCS[type];
+  
+  return (
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        onClick={onClose}
+        className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+      />
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+        className="relative w-full max-w-3xl max-h-[80vh] bg-[#111111] border border-white/10 rounded-3xl overflow-hidden flex flex-col shadow-2xl"
+      >
+        <div className="p-6 border-b border-white/5 flex items-center justify-between bg-[#111111]">
+          <h2 className="text-2xl font-display font-bold text-white">{doc.title}</h2>
+          <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full transition-colors">
+            <X className="w-6 h-6 text-[#888888]" />
+          </button>
+        </div>
+        <div className="p-8 overflow-y-auto custom-scrollbar prose prose-invert prose-green max-w-none">
+          <div 
+            className="text-[#888888] leading-relaxed space-y-6 legal-content"
+            dangerouslySetInnerHTML={{ __html: doc.content }}
+          />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
 
 function Navbar() {
   return (
@@ -337,21 +423,28 @@ function CTA() {
   );
 }
 
-function Footer() {
+function Footer({ onOpenLegal }: { onOpenLegal: (type: keyof typeof LEGAL_DOCS) => void }) {
   return (
     <footer className="py-12 px-6 border-t border-white/5 bg-[#050505]">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-        <div className="flex items-center gap-2">
-          <Bot className="w-6 h-6 text-[#00FF94]" />
-          <span className="font-display font-bold text-lg">Ai Platform</span>
+      <div className="max-w-7xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-8 mb-8">
+          <div className="flex items-center gap-2">
+            <Bot className="w-6 h-6 text-[#00FF94]" />
+            <span className="font-display font-bold text-lg">Ai Platform</span>
+          </div>
+          <div className="flex flex-wrap justify-center gap-6 text-sm text-[#888888]">
+            <button onClick={() => onOpenLegal('privacy')} className="hover:text-white transition-colors">Политика конфиденциальности</button>
+            <button onClick={() => onOpenLegal('terms')} className="hover:text-white transition-colors">Условия использования</button>
+            <button onClick={() => onOpenLegal('cookies')} className="hover:text-white transition-colors">Cookie Policy</button>
+          </div>
+          <div className="flex gap-4 text-sm text-[#888888]">
+            <a href="https://t.me/it_turk" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a>
+            <a href="#" className="hover:text-white transition-colors">Twitter</a>
+            <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+          </div>
         </div>
-        <div className="text-[#888888] text-sm">
-          © {new Date().getFullYear()} Ai Platform. AI-First Development Agency.
-        </div>
-        <div className="flex gap-4 text-sm text-[#888888]">
-          <a href="https://t.me/it_turk" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a>
-          <a href="#" className="hover:text-white transition-colors">Twitter</a>
-          <a href="#" className="hover:text-white transition-colors">LinkedIn</a>
+        <div className="text-center text-[#444444] text-xs pt-8 border-t border-white/5">
+          © {new Date().getFullYear()} Ai Platform. AI-First Development Agency. Все права защищены.
         </div>
       </div>
     </footer>
@@ -359,6 +452,8 @@ function Footer() {
 }
 
 export default function App() {
+  const [activeLegal, setActiveLegal] = React.useState<keyof typeof LEGAL_DOCS | null>(null);
+
   return (
     <div className="min-h-screen bg-[#050505] text-white selection:bg-[#00FF94] selection:text-black font-sans">
       <Navbar />
@@ -370,7 +465,14 @@ export default function App() {
         <Cases />
         <CTA />
       </main>
-      <Footer />
+      <Footer onOpenLegal={setActiveLegal} />
+      
+      {activeLegal && (
+        <LegalModal 
+          type={activeLegal} 
+          onClose={() => setActiveLegal(null)} 
+        />
+      )}
     </div>
   );
 }
